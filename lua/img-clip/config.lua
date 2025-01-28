@@ -36,7 +36,7 @@ local defaults = {
     process_cmd = "", ---@type string
     copy_images = false, ---@type boolean
     download_images = true, ---@type boolean
-    extra_image_types = {}, ---@type table
+    extra_image_types = {}, ---@type string[]
 
     -- drag and drop options
     drag_and_drop = {

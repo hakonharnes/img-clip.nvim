@@ -111,6 +111,7 @@ The plugin is highly configurable. Please refer to the default configuration bel
     process_cmd = "", ---@type string | fun(): string
     copy_images = false, ---@type boolean | fun(): boolean
     download_images = true, ---@type boolean | fun(): boolean
+    extra_image_types = {}, ---@type string[]
 
     -- drag and drop options
     drag_and_drop = {
