@@ -36,6 +36,7 @@ local defaults = {
     process_cmd = "", ---@type string
     copy_images = false, ---@type boolean
     download_images = true, ---@type boolean
+    extra_image_types = {}, ---@type table
 
     -- drag and drop options
     drag_and_drop = {
@@ -72,6 +73,8 @@ local defaults = {
   \label{fig:$LABEL}
 \end{figure}
     ]], ---@type string
+
+      extra_image_types = { "pdf" }, ---@type table
     },
 
     typst = {
@@ -294,7 +297,7 @@ end
 ---@param key string: The key, may be nested (e.g. "default.debug")
 ---@param args? table: Args that should be passed to the option function
 ---@param opts? table: Opts passed explicitly to the function
----@return string | nil
+---@return string | table | nil
 M.get_opt = function(key, args, opts)
   -- use explicit opts if provided
   -- otherwise, try to get the value from the api_opts

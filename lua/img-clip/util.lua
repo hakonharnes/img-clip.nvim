@@ -133,6 +133,12 @@ M.is_image_path = function(str)
     or str:match("^.*%.(jpg)$") ~= nil
     or str:match("^.*%.(jpeg)$") ~= nil
 
+  -- TODO: Add fast path that avoids these checks if ft is .png, .jpg or .jpeg
+  -- TODO: deal with warning about typing
+  for _, ext in ipairs(config.get_opt("extra_image_types")) do
+    has_image_ext = has_image_ext or (str:match("^.*%.(" .. ext .. ")$") ~= nil)
+  end
+
   return has_path_sep and has_image_ext
 end
 
