@@ -117,6 +117,19 @@ M.is_image_url = function(str)
     return true
   end
 
+  -- Check extra_types
+  local extra_types = config.get_opt("extra_image_types")
+  --- @cast extra_types table
+  for _, ext in ipairs(extra_types) do
+    if str:match("^.*%.(" .. ext .. ")$") ~= nil then
+      return true
+    end
+  end
+
+  -- TODO: Could this curl be made to support pdfs or svgs etc?
+  -- Content-Type for pdf seems to be application/pdf
+  -- For svg it seems to be image/svg+xml
+
   -- send a head request to the url and check content type
   local command = string.format("curl -s -I -w '%%{content_type}' '%s'", str)
   local output, exit_code = M.execute(command)
