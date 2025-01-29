@@ -202,7 +202,7 @@ end
 ---get the value of the option, executing it if it's a function
 ---@param val any
 ---@param args? table
----@return string | nil
+---@return string | table | nil
 local function get_val(val, args)
   if val == nil then
     return nil
@@ -216,7 +216,7 @@ end
 ---get the option from the custom table
 ---@param key string
 ---@param args? table
----@return string | nil
+---@return string | table | nil
 local function get_custom_opt(key, opts, args)
   if opts["custom"] == nil then
     return nil
@@ -232,7 +232,7 @@ end
 ---get the option from the files table
 ---@param key string
 ---@param args? table
----@return string | nil
+---@return string | table | nil
 local function get_file_opt(key, opts, args, file)
   if opts["files"] == nil then
     return nil
@@ -254,7 +254,7 @@ end
 ---get the option from the dirs table
 ---@param key string
 ---@param args? table
----@return string | nil
+---@return string | table | nil
 local function get_dir_opt(key, opts, args, dir)
   if opts["dirs"] == nil then
     return nil
