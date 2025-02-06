@@ -1,5 +1,6 @@
 local config = require("img-clip.config")
 local debug = require("img-clip.debug")
+local mime_types = require("img-clip.mime_types")
 
 local M = {}
 
@@ -126,14 +127,29 @@ M.is_image_url = function(str)
     end
   end
 
-  -- TODO: Could this curl be made to support pdfs or svgs etc?
-  -- Content-Type for pdf seems to be application/pdf
-  -- For svg it seems to be image/svg+xml
-
   -- send a head request to the url and check content type
-  local command = string.format("curl -s -I -w '%%{content_type}' '%s'", str)
+  -- Add the 'CONTENT_TYPE' text on the last line for easier matching
+  -- TODO: could alternatively use '-o /dev/null' to only return content type
+  local command = string.format("curl -s -I -w 'CONTENT_TYPE: %%{content_type}' '%s'", str)
   local output, exit_code = M.execute(command)
-  return exit_code == 0 and output ~= nil and (output:match("image/png") ~= nil or output:match("image/jpeg") ~= nil)
+
+  if exit_code ~= 0 or output == nil then
+    return false
+  end
+
+  -- Match the content type
+  -- The capture group is any pattern, until the next semi-colon or white space.
+  -- Note this makes the assumption that the actual content type is first
+  ---@cast output string
+  local content_type = string.match(output, "CONTENT_TYPE:%s([^%s;]+)")
+
+  return content_type ~= nil
+    and (
+      content_type == "image/png"
+      or content_type == "image/jpeg"
+      -- See if this type is supported in extra_types
+      or mime_types.is_supported_mime_type(content_type, extra_types)
+    )
 end
 
 ---@param str string
