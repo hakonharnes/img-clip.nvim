@@ -131,6 +131,7 @@ M.is_image_url = function(str)
   -- Add the 'CONTENT_TYPE' text on the last line for easier matching
   -- TODO: could alternatively use '-o /dev/null' to only return content type
   local command = string.format("curl -s -I -w 'CONTENT_TYPE: %%{content_type}' '%s'", str)
+
   local output, exit_code = M.execute(command)
 
   if exit_code ~= 0 or output == nil then

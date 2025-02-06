@@ -5,11 +5,16 @@ local M = {}
 --- @param formats string[]
 --- @return boolean
 M.is_supported_mime_type = function(mime_type, formats)
-  local fmts = M.mime_types[mime_type]
+  local mime_fmts = M.mime_types[mime_type]
 
-  if type(fmts) == "string" then
+  if type(mime_fmts) == "string" then
     -- Make a table, because multiple formats could map to the MIME type
-    fmts = { fmts }
+    mime_fmts = { mime_fmts }
+  end
+
+  -- Handle unknown formats
+  if mime_fmts == nil then
+    return false
   end
 
   -- Convert into a set (https://www.lua.org/pil/11.5.html)
@@ -18,7 +23,7 @@ M.is_supported_mime_type = function(mime_type, formats)
     valid_formats[format] = true
   end
 
-  for _, fmt in pairs(fmts) do
+  for _, fmt in pairs(mime_fmts) do
     if valid_formats[fmt] ~= nil then
       return true
     end
