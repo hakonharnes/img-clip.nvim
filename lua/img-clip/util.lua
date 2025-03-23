@@ -114,14 +114,16 @@ M.is_image_url = function(str)
   end
 
   -- assume its a valid image link if it the url ends with an extension
+  -- FIXME: the seperate checks for these are not technically correct for the semantics of the `format` option.
+  -- If the user did not want to support these png + jpeg this currently ignores that.
   if str:match("%.png$") or str:match("%.jpg$") or str:match("%.jpeg$") then
     return true
   end
 
   -- Check extra_types
-  local extra_types = config.get_opt("extra_image_types")
-  --- @cast extra_types table
-  for _, ext in ipairs(extra_types) do
+  local image_formats = config.get_opt("formats")
+  --- @cast image_formats table
+  for _, ext in ipairs(image_formats) do
     if str:match("^.*%.(" .. ext .. ")$") ~= nil then
       return true
     end
@@ -146,10 +148,10 @@ M.is_image_url = function(str)
 
   return content_type ~= nil
     and (
-      content_type == "image/png"
+      content_type == "image/png" -- TODO: Remove these separate png or jpeg checks?
       or content_type == "image/jpeg"
-      -- See if this type is supported in extra_types
-      or mime_types.is_supported_mime_type(content_type, extra_types)
+      -- See if this type is supported in formats
+      or mime_types.is_supported_mime_type(content_type, image_formats)
     )
 end
 
@@ -159,6 +161,11 @@ M.is_image_path = function(str)
   str = string.lower(str)
 
   local has_path_sep = str:find("/") ~= nil or str:find("\\") ~= nil
+
+  -- TODO: Use only 1 regex to capture the extension then check in the formats list?
+
+  -- FIXME: the seperate checks for these are not technically correct for the semantics of the `format` option.
+  -- If the user did not want to support these png + jpeg this currently ignores that.
   local has_image_ext = str:match("^.*%.(png)$") ~= nil
     or str:match("^.*%.(jpg)$") ~= nil
     or str:match("^.*%.(jpeg)$") ~= nil
@@ -168,11 +175,14 @@ M.is_image_path = function(str)
     return has_path_sep
   end
 
-  local extra_types = config.get_opt("extra_image_types")
+  local formats = config.get_opt("formats")
 
-  --- @cast extra_types table
-  for _, ext in ipairs(extra_types) do
+  --- @cast formats table
+  for _, ext in ipairs(formats) do
     has_image_ext = has_image_ext or (str:match("^.*%.(" .. ext .. ")$") ~= nil)
+    if has_image_ext then
+      break
+    end
   end
 
   return has_path_sep and has_image_ext
