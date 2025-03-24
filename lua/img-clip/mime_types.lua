@@ -1,16 +1,21 @@
 local M = {}
 
+-- TODO: Open questions
+-- Are there many formats like jpg/jpeg and tif/tiff that commonly have multiple extensions?
+--  Could this be a problem if the table below is not aware of these other extensions.
+-- Should this table just be reduced to images as in: https://www.iana.org/assignments/media-types/media-types.xhtml#image
+--    PDF is not under the image table...
+-- Is there any licensing issue adapting the MDN table
+-- I'd ideally want to move the check out of the `is_supported_mime_type` function and just be able to extract the type.
+-- This would allow autosaving extensions.
+-- Peerhaps this could be achieved by returning both possible extensions when multiple are possible
+
 --- Check if the MIME type is a supported format
 --- @param mime_type string
 --- @param formats string[]
 --- @return boolean
 M.is_supported_mime_type = function(mime_type, formats)
-  local mime_fmts = M.mime_types[mime_type]
-
-  if type(mime_fmts) == "string" then
-    -- Make a table, because multiple formats could map to the MIME type
-    mime_fmts = { mime_fmts }
-  end
+  local mime_fmts = M.formats_from_mime_type(mime_type)
 
   -- Handle unknown formats
   if mime_fmts == nil then
@@ -30,6 +35,18 @@ M.is_supported_mime_type = function(mime_type, formats)
   end
 
   return false
+end
+
+-- Extract the formats
+M.formats_from_mime_type = function(mime_type)
+  local mime_fmts = M.mime_types[mime_type]
+
+  if type(mime_fmts) == "string" then
+    -- Make a table, because multiple formats could map to the MIME type
+    mime_fmts = { mime_fmts }
+  end
+
+  return mime_fmts
 end
 
 -- A table of common MIME types, mapping to their file types
