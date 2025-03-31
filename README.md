@@ -1,10 +1,12 @@
-# 📋 img-clip.nvim
-
-Effortlessly embed images into any markup language, like LaTeX, Markdown or Typst.
+<div align="center">
+  <img src="/icon.png" width="150"/>
+  <h2 align="center">embed.nvim</h1>
+  <p align="center">Embed images into any markup language, like LaTeX, Markdown or Typst. </p>
+</div>
 
 https://github.com/HakonHarnes/img-clip.nvim/assets/89907156/ab4edc10-d296-4532-bfce-6abdd4f218bf
 
-## ⚡ Features
+### Features
 
 - 📋 Paste images directly from your system clipboard
 - 🖱️ Seamlessly drag and drop images from your web browser or file explorer
@@ -17,20 +19,21 @@ https://github.com/HakonHarnes/img-clip.nvim/assets/89907156/ab4edc10-d296-4532-
 - 🔌 Powerful API with example integrations for popular plugins like [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) and [oil.nvim](https://github.com/stevearc/oil.nvim)
 - 💻 Compatible with Linux, macOS, and Windows, including WSL!
 
-## 🔧 Requirements
+
+### Requirements
 
 - **Linux:** [xclip](https://github.com/astrand/xclip) (x11) or [wl-clipboard](https://github.com/bugaevc/wl-clipboard) (wayland)
-- **MacOS:** [pngpaste](https://github.com/jcsalterego/pngpaste) (optional, but recommended)
+- **MacOS:** [pngpaste](https://github.com/jcsalterego/pngpaste)
 - **Windows:** No additional requirements
 
 > [!IMPORTANT]
 > Run `:checkhealth img-clip` after installation to ensure requirements are satisfied.
 
-## 📦 Installation
+### Installation
 
 Install the plugin with your preferred package manager:
 
-### [lazy.nvim](https://github.com/folke/lazy.nvim)
+#### [lazy.nvim](https://github.com/folke/lazy.nvim)
 
 ```lua
 return {
@@ -47,9 +50,9 @@ return {
 }
 ```
 
-## 🚀 Usage
+### Usage
 
-### Commands
+#### Commands
 
 The plugin comes with the following commands:
 
@@ -60,7 +63,7 @@ The plugin comes with the following commands:
 > [!TIP]
 > Consider binding `PasteImage` to something like `<leader>p`.
 
-### API
+#### API
 
 You can also use the Lua equivalent, which allows you to override your configuration by passing the options directly to the function:
 
@@ -76,9 +79,9 @@ require("img-clip").paste_image({ use_absolute_path = false, file_name = "image.
 
 </details>
 
-## ⚙️ Configuration
+### Configuration
 
-### Setup
+#### Setup
 
 The plugin is highly configurable. Please refer to the default configuration below:
 
