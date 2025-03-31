@@ -116,10 +116,10 @@ M.is_image_url = function(str)
   -- assume its a valid image link if it the url ends with an extension
   local extension = str:match("%.(%w+)$") -- Assumes that the extensions are alphanumeric
 
-  --- @cast image_formats table
   local image_formats = config.get_opt("formats")
 
   if extension ~= nil then
+    --- @cast image_formats table
     for _, ext in ipairs(image_formats) do
       if extension == ext then
         return true
@@ -132,7 +132,7 @@ M.is_image_url = function(str)
 
   -- send a head request to the url and check content type
   -- Add the 'CONTENT_TYPE' text on the last line for easier matching
-  -- TODO: could alternatively use '-o /dev/null' to only return content type
+  -- TODO: Perhaps could alternatively use '-o /dev/null' to only return content type
   local command = string.format("curl -s -I -w 'CONTENT_TYPE: %%{content_type}' '%s'", str)
 
   local output, exit_code = M.execute(command)
@@ -147,6 +147,7 @@ M.is_image_url = function(str)
   ---@cast output string
   local content_type = string.match(output, "CONTENT_TYPE:%s([^%s;]+)")
 
+  --- @cast image_formats table
   return content_type ~= nil and mime_types.is_supported_mime_type(content_type, image_formats)
 end
 
