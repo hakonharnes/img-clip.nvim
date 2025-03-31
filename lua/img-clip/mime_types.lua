@@ -2,9 +2,9 @@ local M = {}
 
 --- Check if the MIME type is a supported format
 --- @param mime_type string
---- @param formats string[]
+--- @param supported_formats string[]
 --- @return boolean
-M.is_supported_mime_type = function(mime_type, formats)
+M.is_supported_mime_type = function(mime_type, supported_formats)
   local mime_fmts = M.formats_from_mime_type(mime_type)
 
   -- Handle unknown formats
@@ -14,7 +14,7 @@ M.is_supported_mime_type = function(mime_type, formats)
 
   -- Convert into a set (https://www.lua.org/pil/11.5.html)
   local valid_formats = {}
-  for _, format in ipairs(formats) do
+  for _, format in ipairs(supported_formats) do
     valid_formats[format] = true
   end
 
@@ -27,7 +27,8 @@ M.is_supported_mime_type = function(mime_type, formats)
   return false
 end
 
--- Extract the formats
+-- Return a table of the image format extensions corresponding to this mime type
+--- @return string[]
 M.formats_from_mime_type = function(mime_type)
   local mime_fmts = M.mime_types[mime_type]
 
