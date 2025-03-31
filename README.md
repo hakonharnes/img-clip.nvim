@@ -1,23 +1,27 @@
 <div align="center">
   <img src="/icon.png" width="150"/>
   <h2 align="center">embed.nvim</h1>
-  <p align="center">Embed images into any markup language, like LaTeX, Markdown or Typst. </p>
+  <p align="center">Embed images into any markup language, like LaTeX, Markdown or Typst.</p>
 </div>
 
-https://github.com/HakonHarnes/img-clip.nvim/assets/89907156/ab4edc10-d296-4532-bfce-6abdd4f218bf
+> [!NOTE]
+> This plugin has been renamed from **img-clip.nvim** to **embed.nvim**.
+
+
+https://github.com/HakonHarnes/embed.nvim/assets/89907156/ab4edc10-d296-4532-bfce-6abdd4f218bf
 
 ### Features
 
-- 📋 Paste images directly from your system clipboard
-- 🖱️ Seamlessly drag and drop images from your web browser or file explorer
-- 📁 Embed images as files, web URLs, or Base64-encoded data
-- 🌐 Automatically download and embed images from the web
-- ⚙️ Process images using configurable shell commands
-- 🎨 Configurable templates with placeholders for file paths, labels, and cursor positioning
-- 📝 Built-in templates for popular markup languages like LaTeX, Markdown, and Typst
-- 🔧 Extensive configuration options, including per-project, per-directory, and per-filetype settings
-- 🔌 Powerful API with example integrations for popular plugins like [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) and [oil.nvim](https://github.com/stevearc/oil.nvim)
-- 💻 Compatible with Linux, macOS, and Windows, including WSL!
+- Paste images directly from your system clipboard
+- Seamlessly drag and drop images from your web browser or file explorer
+- Embed images as files, web URLs, or Base64-encoded data
+- Automatically download and embed images from the web
+- Process images using configurable shell commands
+- Configurable templates with placeholders for file paths, labels, and cursor positioning
+- Built-in templates for popular markup languages like LaTeX, Markdown, and Typst
+- Extensive configuration options, including per-project, per-directory, and per-filetype settings
+- Powerful API with example integrations for popular plugins like [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) and [oil.nvim](https://github.com/stevearc/oil.nvim)
+- Compatible with Linux, macOS, and Windows, including WSL!
 
 
 ### Requirements
@@ -27,7 +31,7 @@ https://github.com/HakonHarnes/img-clip.nvim/assets/89907156/ab4edc10-d296-4532-
 - **Windows:** No additional requirements
 
 > [!IMPORTANT]
-> Run `:checkhealth img-clip` after installation to ensure requirements are satisfied.
+> Run `:checkhealth embed` after installation to ensure requirements are satisfied.
 
 ### Installation
 
@@ -37,7 +41,7 @@ Install the plugin with your preferred package manager:
 
 ```lua
 return {
-  "HakonHarnes/img-clip.nvim",
+  "hakonharnes/embed.nvim",
   event = "VeryLazy",
   opts = {
     -- add options here
@@ -68,15 +72,15 @@ The plugin comes with the following commands:
 You can also use the Lua equivalent, which allows you to override your configuration by passing the options directly to the function:
 
 ```lua
-require("img-clip").paste_image(opts?, input?) -- input is optional and can be a file path or URL
+require("embed").paste_image(opts?, input?) -- input is optional and can be a file path or URL
 ```
 
-<details> <summary>Example</summary>
+<details> 
+  <summary>Example</summary>
 
 ```lua
-require("img-clip").paste_image({ use_absolute_path = false, file_name = "image.png" }, "/path/to/file.png")
+require("embed").paste_image({ use_absolute_path = false, file_name = "image.png" }, "/path/to/file.png")
 ```
-
 </details>
 
 ### Configuration
@@ -195,7 +199,8 @@ The plugin is highly configurable. Please refer to the default configuration bel
 
 Option values can be configured as either static values (e.g. "assets"), or by dynamically generating them through functions.
 
-<details> <summary>Example: Dynamically set the dir path</summary>
+<details> 
+  <summary>Example: Dynamically set the dir path</summary>
 
 To set the `dir_path` to match the name of the currently opened file:
 
@@ -204,14 +209,14 @@ dir_path = function()
   return vim.fn.expand("%:t:r")
 end,
 ```
-
 </details>
 
 ### Processing images
 
 The `process_cmd` option allows you to specify a shell command to process the image before saving or embedding it as base64. The command should read the image data from the standard input and write the processed data to the standard output.
 
-<details> <summary>Example: ImageMagick</summary>
+<details> 
+  <summary>Example: ImageMagick</summary>
 
 ```bash
 process_cmd = "convert - -quality 85 -" -- compress the image with 85% quality
@@ -220,7 +225,6 @@ process_cmd = "convert - -colorspace Gray -" -- convert the image to grayscale
 ```
 
 Ensure the specified command and its dependencies are installed and accessible in your system's shell environment. The above examples require [ImageMagick](https://imagemagick.org/index.php) to be installed.
-
 </details>
 
 ### Filetypes
@@ -238,7 +242,8 @@ filetypes = {
 }
 ```
 
-<details> <summary>Example: LaTeX-specific configuration</summary>
+<details> 
+  <summary>Example: LaTeX-specific configuration</summary>
 
 If you only want to use absolute file paths for LaTeX, then:
 
@@ -249,7 +254,6 @@ filetypes = {
   }
 }
 ```
-
 </details>
 
 ### Overriding options for specific files, directories or custom triggers
@@ -269,7 +273,8 @@ The plugin evaluates the options in the following order:
 4. Filetype specific options
 5. Default options
 
-<details> <summary>Example</summary>
+<details> 
+  <summary>Example</summary>
 
 ```lua
 -- file specific options
@@ -321,16 +326,15 @@ dirs = {
   },
 }
 ```
-
 </details>
 
-### Project-specific settings with the `.img-clip.lua` file
+### Project-specific settings with the `.embed.lua` file
 
-Project-specific settings can be specified in a `.img-clip.lua` file in the root of your project.
+Project-specific settings can be specified in a `.embed.lua` file in the root of your project.
 The plugin will automatically load this file and use it to override the default settings.
 If multiple files are found, the closest one to the current file (in any parent directory) will be used.
 
-The `.img-clip.lua` should return a Lua table containing the options (similar to `opts` in lazy.nvim):
+The `.embed.lua` should return a Lua table containing the options (similar to `opts` in lazy.nvim):
 
 ```lua
 return {
@@ -338,7 +342,8 @@ return {
 }
 ```
 
-<details> <summary>Example</summary>
+<details> 
+  <summary>Example</summary>
 
 ```lua
 return {
@@ -353,7 +358,6 @@ return {
   },
 }
 ```
-
 </details>
 
 ### Templates
@@ -371,17 +375,17 @@ For available placeholders, see the following table and the [demonstration](#dem
 
 Templates can also be defined using functions with the above placeholders available as function parameters.
 
-<details> <summary>Example</summary>
+<details> 
+  <summary>Example</summary>
 
 ```lua
 template = function(context)
   return "![" .. context.cursor .. "](" .. context.file_path .. ")"
 end
 ```
-
 </details>
 
-## 🖱️ Drag and drop
+## Drag and drop
 
 The drag and drop feature enables users to drag images from the web browser or file explorer into the terminal to automatically embed them, in normal mode.
 Drag and drop can also be enabled in insert mode by setting the `drag_and_drop.insert_mode` option to `true`.
@@ -566,13 +570,14 @@ A list of terminal emulators and their capabilities is given below.
 > [!WARNING]
 > MacOS URLs only work in Safari.
 
-## 🔌 Integrations
+## Integrations
 
 ### Telescope.nvim
 
 The plugin can be integrated with [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) to provide a seamless way to select and embed images using Telescope's powerful fuzzy finding capabilities.
 
-<details> <summary>Example configuration</summary>
+<details> 
+  <summary>Example configuration</summary>
 
 ```lua
 function()
@@ -587,8 +592,8 @@ function()
         local filepath = entry[1]
         actions.close(prompt_bufnr)
 
-        local img_clip = require("img-clip")
-        img_clip.paste_image(nil, filepath)
+        local embed = require("embed")
+        embed.paste_image(nil, filepath)
       end
 
       map("i", "<CR>", embed_image)
@@ -601,14 +606,14 @@ end
 ```
 
 The above function should be bound to a keymap, e.g. through lazy.nvim.
-
 </details>
 
 ### Oil.nvim
 
 The plugin also integrates with [oil.nvim](https://github.com/stevearc/oil.nvim), providing a convenient way to browse and select images using Oil's file explorer.
 
-<details> <summary>Example configuration</summary>
+<details> 
+  <summary>Example configuration</summary>
 
 ```lua
 function()
@@ -617,8 +622,8 @@ function()
   local dir = oil.get_current_dir()
   oil.close()
 
-  local img_clip = require("img-clip")
-  img_clip.paste_image({}, dir .. filename)
+  local embed = require("embed")
+  embed.paste_image({}, dir .. filename)
 end
 ```
 
@@ -626,9 +631,10 @@ The above function should be bound to a keymap, e.g. through lazy.nvim.
 
 </details>
 
-Alternatively, you can invoke img-clip.nvim directly from your oil.nvim configuration:
+Alternatively, you can invoke embed.nvim directly from your oil.nvim configuration:
 
-<details> <summary>Example configuration</summary>
+<details> 
+  <summary>Example configuration</summary>
 
 ```lua
 keymaps = {
@@ -638,14 +644,13 @@ keymaps = {
     local dir = oil.get_current_dir()
     oil.close()
 
-    local img_clip = require("img-clip")
-    img_clip.paste_image({}, dir .. filename)
+    local embed = require("embed")
+    embed.paste_image({}, dir .. filename)
   end,
 }
 ```
-
 </details>
 
-## 🙌 Contributing
+## Contributing
 
 Contributions are welcome! If you have any ideas, suggestions, or bug reports, please open an issue on the GitHub repository.
