@@ -1,15 +1,5 @@
 local M = {}
 
--- TODO: Open questions
--- Are there many formats like jpg/jpeg and tif/tiff that commonly have multiple extensions?
---  Could this be a problem if the table below is not aware of these other extensions.
--- Should this table just be reduced to images as in: https://www.iana.org/assignments/media-types/media-types.xhtml#image
---    PDF is not under the image table...
--- Is there any licensing issue adapting the MDN table
--- I'd ideally want to move the check out of the `is_supported_mime_type` function and just be able to extract the type.
--- This would allow autosaving extensions.
--- Peerhaps this could be achieved by returning both possible extensions when multiple are possible
-
 --- Check if the MIME type is a supported format
 --- @param mime_type string
 --- @param formats string[]
@@ -109,7 +99,7 @@ M.mime_types = {
   ["application/x-sh"] = "sh",
   ["image/svg+xml"] = "svg",
   ["application/x-tar"] = "tar",
-  ["image/tiff"] = { "tif", "tiff" }, -- TODO: Dedup
+  ["image/tiff"] = { "tif", "tiff" },
   ["video/mp2t"] = "ts",
   ["font/ttf"] = "ttf",
   ["text/plain"] = "txt",
@@ -126,7 +116,6 @@ M.mime_types = {
   -- NOTE: `application/xml` is recommended as of RFC 7303 (section 4.1), but `text/xml` is still used sometimes.
   -- You can assign a specific MIME type to a file with `.xml` extension depending on how its contents are meant to be interpreted.
   -- For instance, an Atom feed is `application/atom+xml`, but `application/xml` serves as a valid default.
-  -- TODO: Support more `application/*+xml` varieties?
   ["application/xml"] = "xml",
   ["text/xml"] = "xml",
   ["application/vnd.mozilla.xul+xml"] = "xul",
