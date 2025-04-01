@@ -118,6 +118,9 @@ below:
         use_absolute_path = false, ---@type boolean | fun(): boolean
         relative_to_current_file = false, ---@type boolean | fun(): boolean
     
+        -- logging options
+        verbose = true, ---@type boolean | fun(): boolean
+    
         -- template options
         template = "$FILE_PATH", ---@type string | fun(context: table): string
         url_encode_path = false, ---@type boolean | fun(): boolean
@@ -509,6 +512,29 @@ Example configuration ~
         end,
       })
     end
+<
+
+The above function should be bound to a keymap, e.g. through lazy.nvim.
+
+
+SNACKS.NVIM ~
+
+The plugin can be integrated with Snacks.nvim picker
+<https://github.com/folke/snacks.nvim> which includes built-in support for
+previewing media files.
+
+Example configuration ~
+
+>lua
+    function()
+        Snacks.picker.files {
+            ft = { "jpg", "jpeg", "png", "webp" },
+            confirm = function(self, item, _)
+                self:close()
+                require("img-clip").paste_image({}, "./" .. item.file) -- ./ is necessary for img-clip to recognize it as path
+            end,
+        }
+    end()
 <
 
 The above function should be bound to a keymap, e.g. through lazy.nvim.
