@@ -59,15 +59,14 @@ end
 ---@param msg string
 ---@param verbose boolean?
 M.warn = function(msg, verbose)
-  if M.verbose or verbose then
+  if config.get_opt("verbose") then
     vim.notify(msg, vim.log.levels.WARN, { title = "img-clip" })
   end
 end
 
 ---@param msg string
----@param verbose boolean?
-M.error = function(msg, verbose)
-  if M.verbose or verbose then
+M.error = function(msg)
+  if config.get_opt("verbose") then
     vim.notify(msg, vim.log.levels.ERROR, { title = "img-clip" })
   end
 end

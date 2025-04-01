@@ -17,6 +17,9 @@ local defaults = {
     use_absolute_path = false, ---@type boolean
     relative_to_current_file = false, ---@type boolean
 
+    -- show warning messages
+    verbose = true, ---@type boolean | fun(): boolean
+
     -- template options
     template = "$FILE_PATH", ---@type string
     url_encode_path = false, ---@type boolean

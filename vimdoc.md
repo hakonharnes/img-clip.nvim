@@ -92,6 +92,9 @@ The plugin is highly configurable. Please refer to the default configuration bel
     use_absolute_path = false, ---@type boolean | fun(): boolean
     relative_to_current_file = false, ---@type boolean | fun(): boolean
 
+    -- logging options
+    verbose = true, ---@type boolean | fun(): boolean
+
     -- template options
     template = "$FILE_PATH", ---@type string | fun(context: table): string
     url_encode_path = false, ---@type boolean | fun(): boolean
