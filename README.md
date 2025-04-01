@@ -601,6 +601,28 @@ The above function should be bound to a keymap, e.g. through lazy.nvim.
 
 </details>
 
+### Snacks.nvim
+
+The plugin can be integrated with [Snacks.nvim picker](https://github.com/folke/snacks.nvim) which includes built-in support for previewing media files.
+
+<details> <summary>Example configuration</summary>
+
+```lua
+function()
+    Snacks.picker.files {
+    	ft = { "jpg", "jpeg", "png", "webp" },
+    	confirm = function(self, item, _)
+    	    self:close()
+    	    require("img-clip").paste_image({}, "./" .. item.file) -- ./ is necessary for img-clip to recognize it as path
+    	end,
+    }
+end()
+```
+
+The above function should be bound to a keymap, e.g. through lazy.nvim.
+
+</details>
+
 ### Oil.nvim
 
 The plugin also integrates with [oil.nvim](https://github.com/stevearc/oil.nvim), providing a convenient way to browse and select images using Oil's file explorer.
