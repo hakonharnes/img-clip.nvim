@@ -89,6 +89,7 @@ The plugin is highly configurable. Please refer to the default configuration bel
     dir_path = "assets", ---@type string | fun(): string
     extension = "png", ---@type string | fun(): string
     file_name = "%Y-%m-%d-%H-%M-%S", ---@type string | fun(): string
+    prepend_filename = false, ---@type boolean | fun(): boolean
     use_absolute_path = false, ---@type boolean | fun(): boolean
     relative_to_current_file = false, ---@type boolean | fun(): boolean
 

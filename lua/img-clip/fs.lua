@@ -123,6 +123,10 @@ M.get_file_path = function(ext)
     file_path = dir_path .. config_file_name
   end
 
+  if config.get_opt("prepend_filename") then
+    file_path = config_file_name .. "-" .. file_path
+  end
+
   -- add file ext if missing
   if vim.fn.fnamemodify(file_path, ":e") == "" then
     file_path = M.add_file_ext(file_path, ext)
