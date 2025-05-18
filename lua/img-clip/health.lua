@@ -5,6 +5,7 @@ local M = {}
 local ok = vim.health.ok or vim.health.report_ok
 local start = vim.health.start or vim.health.report_start
 local error = vim.health.error or vim.health.report_error
+local warn = vim.health.warn or vim.health.report_warn
 
 M.check = function()
   start("img-clip.nvim")
@@ -27,10 +28,12 @@ M.check = function()
 
   -- MacOS
   elseif util.has("mac") then
-    if util.executable("pngpaste") then
-      ok("`pngpaste` is installed")
+    if util.executable("pbctl") then
+      ok("`pbctl` is installed")
+    elseif util.executable("pngpaste") then
+      warn("`pngpaste` is deprecated. Install `pbctl` instead")
     else
-      error("`pngpaste` is not installed")
+      error("`pbctl` is not installed")
     end
 
   -- Windows

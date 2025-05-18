@@ -20,7 +20,7 @@ https://github.com/HakonHarnes/img-clip.nvim/assets/89907156/ab4edc10-d296-4532-
 ## 🔧 Requirements
 
 - **Linux:** [xclip](https://github.com/astrand/xclip) (x11) or [wl-clipboard](https://github.com/bugaevc/wl-clipboard) (wayland)
-- **MacOS:** [pngpaste](https://github.com/jcsalterego/pngpaste)
+- **MacOS:** [pbctl](https://github.com/hakonharnes/pbctl)
 - **Windows:** No additional requirements
 
 > [!IMPORTANT]

@@ -16,7 +16,9 @@ M.get_clip_cmd = function()
 
   -- MacOS
   elseif util.has("mac") then
-    if util.executable("pngpaste") then
+    if util.executable("pbctl") then
+      M.clip_cmd = "pbctl"
+    elseif util.executable("pngpaste") then
       M.clip_cmd = "pngpaste"
     end
 
@@ -48,8 +50,14 @@ M.content_is_image = function()
     local output = util.execute("wl-paste --list-types")
     return output ~= nil and output:find("image/png") ~= nil
 
+    -- MacOS (pbctl)
+  elseif cmd == "pbctl" then
+    local output, exit_code = util.execute("pbctl types")
+    return output ~= nil and output:find("image/") ~= nil
+
   -- MacOS (pngpaste)
   elseif cmd == "pngpaste" then
+    util.warn("`pngpaste` is deprecated. Install `pbctl` instead")
     local _, exit_code = util.execute("pngpaste -")
     return exit_code == 0
 
@@ -80,6 +88,12 @@ M.save_image = function(file_path)
   -- Linux (Wayland)
   elseif cmd == "wl-paste" then
     local command = string.format('wl-paste --type image/png %s> "%s"', process_cmd:gsub("%%", "%%%%"), file_path)
+    local _, exit_code = util.execute(command)
+    return exit_code == 0
+
+    -- MacOS (pbctl)
+  elseif cmd == "pbctl" then
+    local command = string.format('pbctl paste %s> "%s"', process_cmd:gsub("%%", "%%%%"), file_path)
     local _, exit_code = util.execute(command)
     return exit_code == 0
 
@@ -123,7 +137,14 @@ M.get_content = function()
       return output:match("^[^\n]+")
     end
 
-  -- MacOS
+  -- MacOS (pbctl)
+  elseif cmd == "pbctl" then
+    local output, exit_code = util.execute("pbctl paste")
+    if exit_code == 0 then
+      return output:match("^[^\n]+")
+    end
+
+  -- MacOS (pngpaste)
   elseif cmd == "pngpaste" then
     local output, exit_code = util.execute("pbpaste")
     if exit_code == 0 then
@@ -159,6 +180,13 @@ M.get_base64_encoded_image = function()
   -- Linux (Wayland)
   elseif cmd == "wl-paste" then
     local output, exit_code = util.execute("wl-paste --type image/png " .. process_cmd .. "| base64 | tr -d '\n'")
+    if exit_code == 0 then
+      return output
+    end
+
+    -- MacOS (pbctl)
+  elseif cmd == "pbctl" then
+    local output, exit_code = util.execute("pbctl paste " .. process_cmd .. "| base64 | tr -d '\n'")
     if exit_code == 0 then
       return output
     end
