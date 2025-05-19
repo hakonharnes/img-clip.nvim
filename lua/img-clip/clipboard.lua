@@ -52,7 +52,7 @@ M.content_is_image = function()
 
     -- MacOS (pbctl)
   elseif cmd == "pbctl" then
-    local output, exit_code = util.execute("pbctl types")
+    local output = util.execute("pbctl types")
     return output ~= nil and output:find("image/") ~= nil
 
   -- MacOS (pngpaste)
