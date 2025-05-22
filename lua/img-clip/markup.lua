@@ -1,5 +1,6 @@
 local config = require("img-clip.config")
 local fs = require("img-clip.fs")
+local db = require("img-clip.debug")
 
 local M = {}
 
@@ -27,19 +28,30 @@ end
 function M.get_new_cursor_row(cur_row, lines)
   for i, line in ipairs(lines) do
     if line:match("$CURSOR") then
-      return cur_row + i, line, i
+      local new_row = config.get_opt("insert_at_cursor") and (cur_row - 1) or cur_row
+      return new_row + i, line, i
     end
   end
 
-  return cur_row + #lines, lines[#lines], #lines
+  local new_row = config.get_opt("insert_at_cursor") and (cur_row - 1) or cur_row
+  return new_row + #lines, lines[#lines], #lines
 end
 
 ---@param line string
+---@param index number The line index of the template where the line param is found
+---@param cur_col number The column index on which the cursor is currently positioned
 ---@return number new_col The new cursor col pos
-function M.get_new_cursor_col(line)
+function M.get_new_cursor_col(line, index, cur_col)
   local cursor_pos = line:find("$CURSOR")
   if cursor_pos then
+    if config.get_opt("insert_at_cursor") and index == 1 then
+      return cur_col + cursor_pos
+    end
     return cursor_pos - 1
+  end
+
+  if config.get_opt("insert_at_cursor") and index == 1 then
+    return cur_col + string.len(line)
   end
 
   return string.len(line) - 1
@@ -126,21 +138,26 @@ function M.insert_markup(input, is_file_path)
   local lines = M.split_lines(template)
   local cur_pos = vim.api.nvim_win_get_cursor(0)
   local cur_row = cur_pos[1]
+  local cur_col = cur_pos[2]
 
   -- get new cursor position
   local new_row, line, index = M.get_new_cursor_row(cur_row, lines)
-  local new_col = M.get_new_cursor_col(line)
+  local new_col = M.get_new_cursor_col(line, index, cur_col)
 
   -- remove cursor placeholder from template
   lines[index] = line:gsub("$CURSOR", "")
 
   -- paste lines and place cursor in correct position
-  vim.api.nvim_put(lines, "l", true, true)
+  local mode = "l"
+  if config.get_opt("insert_at_cursor") then
+    mode = "c"
+  end
+  vim.api.nvim_put(lines, mode, true, true)
   vim.api.nvim_win_set_cursor(0, { new_row, new_col })
 
   -- enter insert mode if configured
   if config.get_opt("insert_mode_after_paste") and vim.api.nvim_get_mode().mode ~= "i" then
-    if new_col == string.len(line) - 1 then
+    if new_col == string.len(line) - 1 or (index == 1 and config.get_opt("insert_at_cursor")) then
       vim.api.nvim_input("a")
     else
       vim.api.nvim_input("i")
