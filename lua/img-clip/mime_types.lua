@@ -43,7 +43,6 @@ end
 -- A table of common MIME types mapping to file extensions.
 -- Based on public documentation and observed conventions across platforms.
 M.mime_types = {
-
   ["audio/aac"] = "aac",
   ["application/x-abiword"] = "abw",
   ["image/apng"] = "apng",
@@ -64,7 +63,7 @@ M.mime_types = {
   ["application/vnd.ms-fontobject"] = "eot",
   ["application/epub+zip"] = "epub",
   ["application/gzip"] = "gz",
-  -- NOTE: Windows and macOS upload `.gz` files with the non-standard MIME type `application/x-gzip`.
+  -- Windows and macOS upload `.gz` files with this the non-standard MIME type.
   ["application/x-gzip"] = "gz",
   ["image/gif"] = "gif",
   ["text/html"] = { "htm", "html" },
@@ -72,7 +71,7 @@ M.mime_types = {
   ["text/calendar"] = "ics",
   ["application/java-archive"] = "jar",
   ["image/jpeg"] = { "jpeg", "jpg" },
-  --(Specifications: HTML and RFC 9239)
+  -- (Specifications: HTML and RFC 9239)
   ["text/javascript "] = "js",
   ["application/json"] = "json",
   ["application/ld+json"] = "jsonld",
@@ -113,14 +112,13 @@ M.mime_types = {
   ["application/xhtml+xml"] = "xhtml",
   ["application/vnd.ms-excel"] = "xls",
   ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"] = "xlsx",
-  -- NOTE: `application/xml` is recommended as of RFC 7303 (section 4.1), but `text/xml` is still used sometimes.
-  -- You can assign a specific MIME type to a file with `.xml` extension depending on how its contents are meant to be interpreted.
-  -- For instance, an Atom feed is `application/atom+xml`, but `application/xml` serves as a valid default.
+  -- `application/xml` is recommended but `text/xml` is still commonly used.
+  -- The specific MIME types used depends on the content semantics.
   ["application/xml"] = "xml",
   ["text/xml"] = "xml",
   ["application/vnd.mozilla.xul+xml"] = "xul",
   ["application/zip"] = "zip",
-  -- Note, Windows uploads `.zip` files with the non-standard MIME type application/x-zip-compressed.
+  -- Windows use this non-standard MIME type for `.zip` files.
   ["application/x-zip-compressed"] = "zip",
   ["video/3gpp"] = "3gp",
   -- `audio/3gpp` if it doesn't contain video
