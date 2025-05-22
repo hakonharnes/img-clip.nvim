@@ -148,6 +148,8 @@ The plugin is highly configurable. Please refer to the default configuration bel
   \label{fig:$LABEL}
 \end{figure}
     ]], ---@type string | fun(context: table): string
+
+      formats = { "jpeg", "jpg", "png", "pdf" }, ---@type table
     },
 
     typst = {
