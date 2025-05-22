@@ -40,9 +40,8 @@ M.formats_from_mime_type = function(mime_type)
   return mime_fmts
 end
 
--- A table of common MIME types, mapping to their file types
--- Based of the [MDN guide](https://developer.mozilla.org/en-US/docs/Web/HTTP/MIME_types/Common_types)
--- Some common non-standard MIME types called out in the notes of the MDN table have been included too.
+-- A table of common MIME types mapping to file extensions.
+-- Based on public documentation and observed conventions across platforms.
 M.mime_types = {
 
   ["audio/aac"] = "aac",
