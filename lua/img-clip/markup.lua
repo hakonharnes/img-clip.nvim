@@ -45,14 +45,22 @@ function M.get_new_cursor_col(line, index, cur_col)
   local cursor_pos = line:find("$CURSOR")
   if cursor_pos then
     if config.get_opt("insert_at_cursor") and index == 1 then
-      return cur_col + cursor_pos
+      --db.log("col1")
+      --db.print_log()
+      return cur_col + cursor_pos - 1
     end
+      --db.log("col2")
+      --db.print_log()
     return cursor_pos - 1
   end
 
   if config.get_opt("insert_at_cursor") and index == 1 then
+      --db.log("col3")
+      --db.print_log()
     return cur_col + string.len(line)
   end
+      --db.log("col4")
+      --db.print_log()
 
   return string.len(line) - 1
 end
@@ -157,12 +165,19 @@ function M.insert_markup(input, is_file_path)
 
   -- enter insert mode if configured
   if config.get_opt("insert_mode_after_paste") and vim.api.nvim_get_mode().mode ~= "i" then
-    if new_col == string.len(line) - 1 or (index == 1 and config.get_opt("insert_at_cursor")) then
+    if new_col == string.len(line) - 1 then
+      --db.log("first")
+      vim.api.nvim_input("a")
+    elseif index == 1 and config.get_opt("insert_at_cursor") then
+      --db.log("second")
       vim.api.nvim_input("a")
     else
+      --db.log("third")
       vim.api.nvim_input("i")
     end
   end
+  --db.log(new_col)
+  --db.print_log()
 
   return true
 end
