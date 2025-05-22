@@ -14,14 +14,12 @@ M.paste_image = function(input)
   if input then
     input = util.sanitize_input(input)
 
-    -- TODO: Change to extracting the image type and then checking if supported separately.
     if util.is_image_url(input) then
       return M.paste_image_from_url(input)
     elseif util.is_image_path(input) then
       return M.paste_image_from_path(input)
     end
 
-    -- TODO: Improve warning message, saying which image type is not supported.
     util.warn("Content is not an image.")
     return false
   end

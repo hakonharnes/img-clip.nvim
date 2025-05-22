@@ -130,9 +130,8 @@ M.is_image_url = function(str)
     return false
   end
 
-  -- send a head request to the url and check content type
+  -- send a head request to the url and check content type.
   -- Add the 'CONTENT_TYPE' text on the last line for easier matching
-  -- TODO: Perhaps could alternatively use '-o /dev/null' to only return content type
   local command = string.format("curl -s -I -w 'CONTENT_TYPE: %%{content_type}' '%s'", str)
 
   local output, exit_code = M.execute(command)
