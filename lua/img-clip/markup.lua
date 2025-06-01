@@ -25,13 +25,14 @@ end
 ---@return string matched_line The matched line in the tempalte (or the last line if no match)
 ---@return number matched_line_index The index of the matched line
 function M.get_new_cursor_row(cur_row, lines)
+  local delta = config.get_opt("insert_template_after_cursor") and 0 or -1
   for i, line in ipairs(lines) do
     if line:match("$CURSOR") then
-      return cur_row + i, line, i
+      return cur_row + i + delta, line, i
     end
   end
 
-  return cur_row + #lines, lines[#lines], #lines
+  return cur_row + #lines + delta, lines[#lines], #lines
 end
 
 ---@param line string
@@ -135,17 +136,19 @@ function M.insert_markup(input, is_file_path)
   lines[index] = line:gsub("$CURSOR", "")
 
   -- paste lines and place cursor in correct position
-  vim.api.nvim_put(lines, "l", true, true)
-  vim.api.nvim_win_set_cursor(0, { new_row, new_col })
+  vim.schedule(function()
+    vim.api.nvim_put(lines, "l", config.get_opt("insert_template_after_cursor"), true)
+    vim.api.nvim_win_set_cursor(0, { new_row, new_col })
 
-  -- enter insert mode if configured
-  if config.get_opt("insert_mode_after_paste") and vim.api.nvim_get_mode().mode ~= "i" then
-    if new_col == string.len(line) - 1 then
-      vim.api.nvim_input("a")
-    else
-      vim.api.nvim_input("i")
+    -- enter insert mode if configured
+    if config.get_opt("insert_mode_after_paste") and vim.api.nvim_get_mode().mode ~= "i" then
+      if new_col == string.len(line) - 1 then
+        vim.api.nvim_input("a")
+      else
+        vim.api.nvim_input("i")
+      end
     end
-  end
+  end)
 
   return true
 end
