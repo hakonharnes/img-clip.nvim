@@ -101,6 +101,7 @@ The plugin is highly configurable. Please refer to the default configuration bel
     relative_template_path = true, ---@type boolean | fun(): boolean
     use_cursor_in_template = true, ---@type boolean | fun(): boolean
     insert_mode_after_paste = true, ---@type boolean | fun(): boolean
+    insert_template_after_cursor = true, ---@type boolean | fun(): boolean
 
     -- prompt options
     prompt_for_file_name = true, ---@type boolean | fun(): boolean
