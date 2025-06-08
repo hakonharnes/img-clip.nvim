@@ -136,19 +136,17 @@ function M.insert_markup(input, is_file_path)
   lines[index] = line:gsub("$CURSOR", "")
 
   -- paste lines and place cursor in correct position
-  vim.schedule(function()
-    vim.api.nvim_put(lines, "l", config.get_opt("insert_template_after_cursor"), true)
-    vim.api.nvim_win_set_cursor(0, { new_row, new_col })
+  vim.api.nvim_put(lines, "l", config.get_opt("insert_template_after_cursor"), true)
+  vim.api.nvim_win_set_cursor(0, { new_row, new_col })
 
-    -- enter insert mode if configured
-    if config.get_opt("insert_mode_after_paste") and vim.api.nvim_get_mode().mode ~= "i" then
-      if new_col == string.len(line) - 1 then
-        vim.api.nvim_input("a")
-      else
-        vim.api.nvim_input("i")
-      end
+  -- enter insert mode if configured
+  if config.get_opt("insert_mode_after_paste") and vim.api.nvim_get_mode().mode ~= "i" then
+    if new_col == string.len(line) - 1 then
+      vim.api.nvim_input("a")
+    else
+      vim.api.nvim_input("i")
     end
-  end)
+  end
 
   return true
 end
