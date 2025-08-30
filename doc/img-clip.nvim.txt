@@ -1,4 +1,4 @@
-*img-clip.nvim.txt*           For NVIM v0.8.0           Last change: June 2025
+*img-clip.nvim.txt*          For NVIM v0.8.0          Last change: August 2025
 
 ==============================================================================
 Table of Contents                            *img-clip.nvim-table-of-contents*
