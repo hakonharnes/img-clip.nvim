@@ -119,8 +119,8 @@ end
 ---@return boolean
 function M.insert_markup(input, is_file_path)
   local template = M.get_template(input, is_file_path)
-  if not template then
-    return false
+  if not template or template == "" then
+    return true -- no template found, so do nothing (but we didn't "fail")
   end
 
   -- get current cursor position
