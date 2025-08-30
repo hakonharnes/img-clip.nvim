@@ -40,6 +40,7 @@ local defaults = {
     process_cmd = "", ---@type string
     copy_images = false, ---@type boolean
     download_images = true, ---@type boolean
+    formats = { "jpeg", "jpg", "png" }, ---@type string[]
 
     -- drag and drop options
     drag_and_drop = {
@@ -76,6 +77,8 @@ local defaults = {
   \label{fig:$LABEL}
 \end{figure}
     ]], ---@type string
+
+      formats = { "jpeg", "jpg", "png", "pdf" }, ---@type table
     },
 
     typst = {
@@ -203,7 +206,7 @@ end
 ---get the value of the option, executing it if it's a function
 ---@param val any
 ---@param args? table
----@return string | nil
+---@return string | table | nil
 local function get_val(val, args)
   if val == nil then
     return nil
@@ -217,7 +220,7 @@ end
 ---get the option from the custom table
 ---@param key string
 ---@param args? table
----@return string | nil
+---@return string | table | nil
 local function get_custom_opt(key, opts, args)
   if opts["custom"] == nil then
     return nil
@@ -233,7 +236,7 @@ end
 ---get the option from the files table
 ---@param key string
 ---@param args? table
----@return string | nil
+---@return string | table | nil
 local function get_file_opt(key, opts, args, file)
   if opts["files"] == nil then
     return nil
@@ -255,7 +258,7 @@ end
 ---get the option from the dirs table
 ---@param key string
 ---@param args? table
----@return string | nil
+---@return string | table | nil
 local function get_dir_opt(key, opts, args, dir)
   if opts["dirs"] == nil then
     return nil
@@ -298,7 +301,7 @@ end
 ---@param key string: The key, may be nested (e.g. "default.debug")
 ---@param args? table: Args that should be passed to the option function
 ---@param opts? table: Opts passed explicitly to the function
----@return string | nil
+---@return string | table | nil
 M.get_opt = function(key, args, opts)
   -- use explicit opts if provided
   -- otherwise, try to get the value from the api_opts

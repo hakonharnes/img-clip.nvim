@@ -115,7 +115,7 @@ describe("util", function()
 
     it("should return true for a valid image URL without an extension but with image content type", function()
       util.execute = function()
-        return "image/png", 0
+        return "CONTENT_TYPE: image/png", 0
       end
       assert.is_true(util.is_image_url("http://example.com/image"))
     end)
