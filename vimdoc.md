@@ -115,6 +115,7 @@ The plugin is highly configurable. Please refer to the default configuration bel
     process_cmd = "", ---@type string | fun(): string
     copy_images = false, ---@type boolean | fun(): boolean
     download_images = true, ---@type boolean | fun(): boolean
+    formats = { "jpeg", "jpg", "png" }, ---@type string[]
 
     -- drag and drop options
     drag_and_drop = {
@@ -151,6 +152,8 @@ The plugin is highly configurable. Please refer to the default configuration bel
   \label{fig:$LABEL}
 \end{figure}
     ]], ---@type string | fun(context: table): string
+
+      formats = { "jpeg", "jpg", "png", "pdf" }, ---@type table
     },
 
     typst = {
