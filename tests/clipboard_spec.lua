@@ -153,7 +153,7 @@ describe("clipboard", function()
           return nil
         end
         util.executable = function(cmd)
-          return cmd == "pngpaste" or cmd == "osascript"
+          return cmd == "pngpaste" 
         end
       end)
 
@@ -192,61 +192,6 @@ describe("clipboard", function()
       it("successfully saves an image", function()
         util.execute = function(command)
           assert(command:match("pngpaste"))
-          return nil, 0 -- simulate successful execution
-        end
-
-        assert.is_true(clipboard.save_image("/path/to/image.png"))
-      end)
-    end)
-
-    describe("osascript", function()
-      before_each(function()
-        util.has = function(feature)
-          return feature == "mac"
-        end
-        os.getenv = function()
-          return nil
-        end
-        util.executable = function(cmd)
-          return cmd == "osascript"
-        end
-      end)
-
-      it("returns 'osascript' as the clipboard command", function()
-        assert.equals("osascript", clipboard.get_clip_cmd())
-      end)
-
-      it("returns true if clipboard content is an image", function()
-        util.execute = function(command)
-          assert(command:match("osascript"))
-          return "class PNGf", 0 -- output of osascript
-        end
-
-        assert.is_true(clipboard.content_is_image())
-      end)
-
-      it("returns false if clipboard content is not an image", function()
-        util.execute = function(command)
-          assert(command:match("osascript"))
-          return "Text", 1 -- output of osascript
-        end
-
-        assert.is_false(clipboard.content_is_image())
-      end)
-
-      it("gets first line of clipboard content", function()
-        util.execute = function(command)
-          assert(command:match("pbpaste"))
-          return [[first line
-        second line]], 0
-        end
-
-        assert.equals("first line", clipboard.get_content())
-      end)
-
-      it("successfully saves an image", function()
-        util.execute = function(command)
-          assert(command:match("osascript"))
           return nil, 0 -- simulate successful execution
         end
 

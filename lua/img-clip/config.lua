@@ -17,12 +17,16 @@ local defaults = {
     use_absolute_path = false, ---@type boolean
     relative_to_current_file = false, ---@type boolean
 
+    -- show warning messages
+    verbose = true, ---@type boolean | fun(): boolean
+
     -- template options
     template = "$FILE_PATH", ---@type string
     url_encode_path = false, ---@type boolean
     relative_template_path = true, ---@type boolean
     use_cursor_in_template = true, ---@type boolean
     insert_mode_after_paste = true, ---@type boolean
+    insert_template_after_cursor = true, ---@type boolean
 
     -- prompt options
     prompt_for_file_name = true, ---@type boolean

@@ -4,7 +4,6 @@ local M = {}
 
 local ok = vim.health.ok or vim.health.report_ok
 local start = vim.health.start or vim.health.report_start
-local warn = vim.health.warn or vim.health.report_warn
 local error = vim.health.error or vim.health.report_error
 
 M.check = function()
@@ -28,15 +27,10 @@ M.check = function()
 
   -- MacOS
   elseif util.has("mac") then
-    if util.executable("osascript") then
-      ok("`osascript` is installed")
-    else
-      error("`osascript` is not installed")
-    end
     if util.executable("pngpaste") then
       ok("`pngpaste` is installed")
     else
-      warn("`pngpaste` is not installed")
+      error("`pngpaste` is not installed")
     end
 
   -- Windows

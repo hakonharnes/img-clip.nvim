@@ -18,8 +18,6 @@ M.get_clip_cmd = function()
   elseif util.has("mac") then
     if util.executable("pngpaste") then
       M.clip_cmd = "pngpaste"
-    elseif util.executable("osascript") then
-      M.clip_cmd = "osascript"
     end
 
   -- Linux (Wayland)
@@ -50,15 +48,10 @@ M.content_is_image = function()
     local output = util.execute("wl-paste --list-types")
     return output ~= nil and output:find("image/png") ~= nil
 
-  -- MacOS (pngpaste) which is faster than osascript
+  -- MacOS (pngpaste)
   elseif cmd == "pngpaste" then
     local _, exit_code = util.execute("pngpaste -")
     return exit_code == 0
-
-  -- MacOS (osascript) as a fallback
-  elseif cmd == "osascript" then
-    local output = util.execute("osascript -e 'clipboard info'")
-    return output ~= nil and output:find("class PNGf") ~= nil
 
   -- Windows
   elseif cmd == "powershell.exe" then
@@ -90,23 +83,9 @@ M.save_image = function(file_path)
     local _, exit_code = util.execute(command)
     return exit_code == 0
 
-  -- MacOS (pngpaste) which is faster than osascript
+  -- MacOS (pngpaste)
   elseif cmd == "pngpaste" then
     local command = string.format('pngpaste - %s> "%s"', process_cmd:gsub("%%", "%%%%"), file_path)
-    local _, exit_code = util.execute(command)
-    return exit_code == 0
-
-  -- MacOS (osascript) as a fallback
-  elseif cmd == "osascript" then
-    local command = string.format(
-      [[osascript -e 'set theFile to (open for access POSIX file "%s" with write permission)' ]]
-        .. [[-e 'try' -e 'write (the clipboard as «class PNGf») to theFile' -e 'end try' ]]
-        .. [[-e 'close access theFile' -e 'do shell script "cat %s %s> %s"']],
-      file_path,
-      file_path,
-      process_cmd:gsub("%%", "%%%%"),
-      file_path
-    )
     local _, exit_code = util.execute(command)
     return exit_code == 0
 
@@ -145,13 +124,8 @@ M.get_content = function()
     end
 
   -- MacOS
-  elseif cmd == "pngpaste" or cmd == "osascript" then
+  elseif cmd == "pngpaste" then
     local output, exit_code = util.execute("pbpaste")
-    if exit_code == 0 then
-      return output:match("^[^\n]+")
-    end
-
-    output, exit_code = util.execute([[osascript -e 'get the clipboard as text']])
     if exit_code == 0 then
       return output:match("^[^\n]+")
     end
@@ -192,19 +166,6 @@ M.get_base64_encoded_image = function()
   -- MacOS (pngpaste)
   elseif cmd == "pngpaste" then
     local output, exit_code = util.execute("pngpaste - " .. process_cmd .. "| base64 | tr -d '\n'")
-    if exit_code == 0 then
-      return output
-    end
-
-  -- MacOS (osascript)
-  elseif cmd == "osascript" then
-    local output, exit_code = util.execute(
-      [[osascript -e 'set theFile to (open for access POSIX file "/tmp/image.png" with write permission)' ]]
-        .. [[-e 'try' -e 'write (the clipboard as «class PNGf») to theFile' -e 'end try' -e 'close access theFile'; ]]
-        .. [[/tmp/image.png ]]
-        .. process_cmd
-        .. [[ | base64 | tr -d "\n" ]]
-    )
     if exit_code == 0 then
       return output
     end

@@ -20,7 +20,7 @@ https://github.com/HakonHarnes/img-clip.nvim/assets/89907156/ab4edc10-d296-4532-
 ## 🔧 Requirements
 
 - **Linux:** [xclip](https://github.com/astrand/xclip) (x11) or [wl-clipboard](https://github.com/bugaevc/wl-clipboard) (wayland)
-- **MacOS:** [pngpaste](https://github.com/jcsalterego/pngpaste) (optional, but recommended)
+- **MacOS:** [pngpaste](https://github.com/jcsalterego/pngpaste)
 - **Windows:** No additional requirements
 
 > [!IMPORTANT]
@@ -92,12 +92,16 @@ The plugin is highly configurable. Please refer to the default configuration bel
     use_absolute_path = false, ---@type boolean | fun(): boolean
     relative_to_current_file = false, ---@type boolean | fun(): boolean
 
+    -- logging options
+    verbose = true, ---@type boolean | fun(): boolean
+
     -- template options
     template = "$FILE_PATH", ---@type string | fun(context: table): string
     url_encode_path = false, ---@type boolean | fun(): boolean
     relative_template_path = true, ---@type boolean | fun(): boolean
     use_cursor_in_template = true, ---@type boolean | fun(): boolean
     insert_mode_after_paste = true, ---@type boolean | fun(): boolean
+    insert_template_after_cursor = true, ---@type boolean | fun(): boolean
 
     -- prompt options
     prompt_for_file_name = true, ---@type boolean | fun(): boolean
@@ -446,6 +450,28 @@ function()
     end,
   })
 end
+```
+
+The above function should be bound to a keymap, e.g. through lazy.nvim.
+
+</details>
+
+### Snacks.nvim
+
+The plugin can be integrated with [Snacks.nvim picker](https://github.com/folke/snacks.nvim) which includes built-in support for previewing media files.
+
+<details> <summary>Example configuration</summary>
+
+```lua
+function()
+    Snacks.picker.files {
+    	ft = { "jpg", "jpeg", "png", "webp" },
+    	confirm = function(self, item, _)
+    	    self:close()
+    	    require("img-clip").paste_image({}, "./" .. item.file) -- ./ is necessary for img-clip to recognize it as path
+    	end,
+    }
+end()
 ```
 
 The above function should be bound to a keymap, e.g. through lazy.nvim.
