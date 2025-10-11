@@ -1,4 +1,4 @@
-*img-clip.nvim.txt*          For NVIM v0.8.0          Last change: August 2025
+*img-clip.nvim.txt*          For NVIM v0.8.0         Last change: October 2025
 
 ==============================================================================
 Table of Contents                            *img-clip.nvim-table-of-contents*
@@ -77,9 +77,9 @@ COMMANDS ~
 
 The plugin comes with the following commands:
 
-- `PasteImage`Pastes an image form the system clipboard
-- `ImgClipDebug`Prints the debug log, including the output of shell commands
-- `ImgClipConfig`Prints the current configuration
+- `PasteImage`: Pastes an image form the system clipboard
+- `ImgClipDebug`: Prints the debug log, including the output of shell commands
+- `ImgClipConfig`: Prints the current configuration
 
 
   [!TIP] Consider binding `PasteImage` to something like `<leader>p`.
@@ -141,6 +141,7 @@ below:
         process_cmd = "", ---@type string | fun(): string
         copy_images = false, ---@type boolean | fun(): boolean
         download_images = true, ---@type boolean | fun(): boolean
+        formats = { "jpeg", "jpg", "png" }, ---@type string[]
     
         -- drag and drop options
         drag_and_drop = {
@@ -177,6 +178,8 @@ below:
       \label{fig:$LABEL}
     \end{figure}
         ]], ---@type string | fun(context: table): string
+    
+          formats = { "jpeg", "jpg", "png", "pdf" }, ---@type table
         },
     
         typst = {
@@ -395,12 +398,12 @@ TEMPLATES ~
 
 Templates in the plugin use placeholders that are dynamically replaced with the
 correct values at runtime. For available placeholders, see the following table
-and the |img-clip.nvim-demonstration|
+and the |img-clip.nvim-demonstration|:
 
   ---------------------------------------------------------------------------------------
   Placeholder         Description                                    Example
   ------------------- ---------------------------------------------- --------------------
-  $FILE_NAME          Filename, including its extension.             image.png
+  $FILE_NAME          File name, including its extension.            image.png
 
   $FILE_NAME_NO_EXT   File name, excluding its extension.            image
 
