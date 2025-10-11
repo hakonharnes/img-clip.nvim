@@ -1,5 +1,6 @@
 local config = require("img-clip.config")
 local debug = require("img-clip.debug")
+local mime_types = require("img-clip.mime_types")
 
 local M = {}
 
@@ -111,14 +112,40 @@ M.is_image_url = function(str)
   end
 
   -- assume its a valid image link if it the url ends with an extension
-  if str:match("%.png$") or str:match("%.jpg$") or str:match("%.jpeg$") then
-    return true
+  local extension = str:match("%.(%w+)$") -- Assumes that the extensions are alphanumeric
+
+  local image_formats = config.get_opt("formats")
+
+  if extension ~= nil then
+    --- @cast image_formats table
+    for _, ext in ipairs(image_formats) do
+      if extension == ext then
+        return true
+      end
+    end
+
+    -- This format was not supported in the user's config
+    return false
   end
 
-  -- send a head request to the url and check content type
-  local command = string.format("curl -s -I -w '%%{content_type}' '%s'", str)
+  -- send a head request to the url and check content type.
+  -- Add the 'CONTENT_TYPE' text on the last line for easier matching
+  local command = string.format("curl -s -I -w 'CONTENT_TYPE: %%{content_type}' '%s'", str)
+
   local output, exit_code = M.execute(command)
-  return exit_code == 0 and output ~= nil and (output:match("image/png") ~= nil or output:match("image/jpeg") ~= nil)
+
+  if exit_code ~= 0 or output == nil then
+    return false
+  end
+
+  -- Match the content type
+  -- The capture group is any pattern, until the next semi-colon or white space.
+  -- Note this makes the assumption that the actual content type is first
+  ---@cast output string
+  local content_type = string.match(output, "CONTENT_TYPE:%s([^%s;]+)")
+
+  --- @cast image_formats table
+  return content_type ~= nil and mime_types.is_supported_mime_type(content_type, image_formats)
 end
 
 ---@param str string
@@ -127,11 +154,25 @@ M.is_image_path = function(str)
   str = string.lower(str)
 
   local has_path_sep = str:find("/") ~= nil or str:find("\\") ~= nil
-  local has_image_ext = str:match("^.*%.(png)$") ~= nil
-    or str:match("^.*%.(jpg)$") ~= nil
-    or str:match("^.*%.(jpeg)$") ~= nil
 
-  return has_path_sep and has_image_ext
+  local extension = str:match("%.(%w+)$") -- Assumes that the extensions are alphanumeric
+
+  if extension == nil then
+    return false
+  end
+
+  local formats = config.get_opt("formats")
+
+  local has_supported_format = false
+  --- @cast formats table
+  for _, ext in ipairs(formats) do
+    has_supported_format = has_supported_format or (ext == extension)
+    if has_supported_format then
+      break
+    end
+  end
+
+  return has_path_sep and has_supported_format
 end
 
 return M
