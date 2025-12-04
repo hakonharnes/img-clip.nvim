@@ -17,7 +17,7 @@ M.check = function()
       error("`pngpaste` is not installed")
     end
 
-    -- Linux (Wayland)
+  -- Linux (Wayland)
   elseif os.getenv("WAYLAND_DISPLAY") then
     if util.executable("wl-copy") then
       ok("`wl-clipboard` is installed")
@@ -25,7 +25,7 @@ M.check = function()
       error("`wl-clipboard` is not installed")
     end
 
-    -- Linux (X11)
+  -- Linux (X11)
   elseif os.getenv("DISPLAY") then
     if util.executable("xclip") then
       ok("`xclip` is installed")
@@ -33,7 +33,7 @@ M.check = function()
       error("`xclip` is not installed")
     end
 
-    -- Windows
+  -- Windows
   elseif util.has("win32") or util.has("wsl") then
     if util.executable("powershell.exe") then
       ok("`powershell.exe` is installed")
@@ -41,7 +41,7 @@ M.check = function()
       error("`powershell.exe` is not installed")
     end
 
-    -- Other OS
+  -- Other OS
   else
     error("Operating system is not supported")
   end
