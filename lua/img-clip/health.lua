@@ -9,8 +9,16 @@ local error = vim.health.error or vim.health.report_error
 M.check = function()
   start("img-clip.nvim")
 
+  -- MacOS
+  if util.has("mac") then
+    if util.executable("pngpaste") then
+      ok("`pngpaste` is installed")
+    else
+      error("`pngpaste` is not installed")
+    end
+
   -- Linux (Wayland)
-  if os.getenv("WAYLAND_DISPLAY") then
+  elseif os.getenv("WAYLAND_DISPLAY") then
     if util.executable("wl-copy") then
       ok("`wl-clipboard` is installed")
     else
@@ -23,14 +31,6 @@ M.check = function()
       ok("`xclip` is installed")
     else
       error("`xclip` is not installed")
-    end
-
-  -- MacOS
-  elseif util.has("mac") then
-    if util.executable("pngpaste") then
-      ok("`pngpaste` is installed")
-    else
-      error("`pngpaste` is not installed")
     end
 
   -- Windows
