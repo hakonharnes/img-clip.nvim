@@ -1,4 +1,4 @@
-*img-clip.nvim.txt*          For NVIM v0.8.0         Last change: October 2025
+*img-clip.nvim.txt*         For NVIM v0.8.0         Last change: December 2025
 
 ==============================================================================
 Table of Contents                            *img-clip.nvim-table-of-contents*
@@ -538,7 +538,7 @@ Example configuration ~
                 require("img-clip").paste_image({}, "./" .. item.file) -- ./ is necessary for img-clip to recognize it as path
             end,
         }
-    end()
+    end
 <
 
 The above function should be bound to a keymap, e.g. through lazy.nvim.
