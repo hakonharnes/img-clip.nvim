@@ -623,7 +623,7 @@ function()
     	    require("img-clip").paste_image({}, "./" .. item.file) -- ./ is necessary for img-clip to recognize it as path
     	end,
     }
-end()
+end
 ```
 
 The above function should be bound to a keymap, e.g. through lazy.nvim.
