@@ -153,8 +153,6 @@ end
 M.is_image_path = function(str)
   str = string.lower(str)
 
-  local has_path_sep = str:find("/") ~= nil or str:find("\\") ~= nil
-
   local extension = str:match("%.(%w+)$") -- Assumes that the extensions are alphanumeric
 
   if extension == nil then
@@ -172,7 +170,7 @@ M.is_image_path = function(str)
     end
   end
 
-  return has_path_sep and has_supported_format
+  return has_supported_format
 end
 
 return M
