@@ -87,16 +87,16 @@ describe("util", function()
       assert.is_false(util.is_image_path("/path/to/file.txt"))
     end)
 
-    it("should return false for a string without a path separator", function()
-      assert.is_false(util.is_image_path("image.png"))
+    it("should return true for a bare filename with a valid extension", function()
+      assert.is_true(util.is_image_path("image.png"))
     end)
 
     it("should return false for a string with a path separator but no file extension", function()
       assert.is_false(util.is_image_path("/path/to/image"))
     end)
 
-    it("should return false for a string with an image file extension but no path separator", function()
-      assert.is_false(util.is_image_path("image.jpeg"))
+    it("should return true for a bare filename with a valid extension and no path separator", function()
+      assert.is_true(util.is_image_path("image.jpeg"))
     end)
   end)
 
