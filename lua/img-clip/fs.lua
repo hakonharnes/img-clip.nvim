@@ -1,6 +1,7 @@
 local clipoard = require("img-clip.clipboard")
 local config = require("img-clip.config")
 local util = require("img-clip.util")
+local fs_mkdir = (vim.uv or vim.loop).fs_mkdir
 
 local M = {}
 
@@ -149,7 +150,7 @@ M.mkdirp = function(dir, mode)
     mod = mod:sub(3)
     path = vim.fn.fnamemodify(dir, mod)
 
-    if not vim.loop.fs_mkdir(path, mode) then
+    if not fs_mkdir(path, mode) then
       return false
     end
   end
