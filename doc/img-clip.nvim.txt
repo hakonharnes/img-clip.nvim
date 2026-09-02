@@ -1,4 +1,5 @@
-*img-clip.nvim.txt*         For NVIM v0.8.0         Last change: December 2025
+*img-clip.nvim.txt*
+                                For NVIM v0.8.0    Last change: September 2026
 
 ==============================================================================
 Table of Contents                            *img-clip.nvim-table-of-contents*
@@ -224,7 +225,7 @@ below:
 
 OPTIONS ~
 
-Option values can be configured as either static values (e.g. "assets"), or by
+Option values can be configured as either static values (e.g. "assets"), or by
 dynamically generating them through functions.
 
 Example: Dynamically set the dir path ~
@@ -293,9 +294,9 @@ conditions. This means that you can have different options for different
 projects, or even different files within the same project.
 
 For files and directories, you can specify settings that apply to only a
-specific file or directory using its absolute path
-(e.g. `/home/user/project/README.md`). You can also specify a general file or
-directory name (e.g. `README.md`) which will apply the settings to any
+specific file or directory using its absolute path (e.g.
+`/home/user/project/README.md`). You can also specify a general file or
+directory name (e.g. `README.md`) which will apply the settings to any
 `README.md` file. For custom options, you can specify a _trigger_ function that
 returns a boolean value that is used to enable it.
 
@@ -518,7 +519,7 @@ Example configuration ~
     end
 <
 
-The above function should be bound to a keymap, e.g. through lazy.nvim.
+The above function should be bound to a keymap, e.g. through lazy.nvim.
 
 
 SNACKS.NVIM ~
@@ -541,7 +542,7 @@ Example configuration ~
     end
 <
 
-The above function should be bound to a keymap, e.g. through lazy.nvim.
+The above function should be bound to a keymap, e.g. through lazy.nvim.
 
 
 OIL.NVIM ~
@@ -564,7 +565,7 @@ Example configuration ~
     end
 <
 
-The above function should be bound to a keymap, e.g. through lazy.nvim.
+The above function should be bound to a keymap, e.g. through lazy.nvim.
 
 Alternatively, you can invoke img-clip.nvim directly from your oil.nvim
 configuration:
