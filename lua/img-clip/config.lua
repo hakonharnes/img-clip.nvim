@@ -27,6 +27,8 @@ local defaults = {
     use_cursor_in_template = true, ---@type boolean
     insert_mode_after_paste = true, ---@type boolean
     insert_template_after_cursor = true, ---@type boolean
+    insert_at_current_line = false, ---@type boolean
+    insert_at_current_line_after = true, ---@type boolean
 
     -- prompt options
     prompt_for_file_name = true, ---@type boolean

@@ -22,10 +22,14 @@ end
 ---@param cur_row number
 ---@param lines string[]
 ---@return number new_row The new cursor row pos
----@return string matched_line The matched line in the tempalte (or the last line if no match)
+---@return string matched_line The matched line in the template (or the last line if no match)
 ---@return number matched_line_index The index of the matched line
 function M.get_new_cursor_row(cur_row, lines)
   local delta = config.get_opt("insert_template_after_cursor") and 0 or -1
+  if config.get_opt("insert_template_after_cursor") then
+    delta = delta + (config.get_opt("insert_at_current_line") and -1 or 0)
+  end
+
   for i, line in ipairs(lines) do
     if line:match("$CURSOR") then
       return cur_row + i + delta, line, i
@@ -36,11 +40,29 @@ function M.get_new_cursor_row(cur_row, lines)
 end
 
 ---@param line string
+---@param is_same_row boolean whether the cursor is on the same row as the line with the $CURSOR placeholder
 ---@return number new_col The new cursor col pos
-function M.get_new_cursor_col(line)
+function M.get_new_cursor_col(line, is_same_row)
+  is_same_row = is_same_row or false
+  is_same_row = is_same_row
+    and config.get_opt("insert_template_after_cursor")
+    and config.get_opt("insert_at_current_line")
+
+  local orig_cursor_pos = 0
+  if is_same_row then
+    local _, orig_col = unpack(vim.api.nvim_win_get_cursor(0))
+    orig_cursor_pos = orig_col
+    if
+      config.get_opt("insert_at_current_line_after")
+      and orig_cursor_pos ~= 0 -- If on an empty line, do not need to increase the column position
+    then
+      orig_cursor_pos = orig_cursor_pos + 1
+    end
+  end
+
   local cursor_pos = line:find("$CURSOR")
   if cursor_pos then
-    return cursor_pos - 1
+    return orig_cursor_pos + cursor_pos - 1
   end
 
   return string.len(line) - 1
@@ -130,13 +152,21 @@ function M.insert_markup(input, is_file_path)
 
   -- get new cursor position
   local new_row, line, index = M.get_new_cursor_row(cur_row, lines)
-  local new_col = M.get_new_cursor_col(line)
+  local is_same_row = cur_row == new_row
+  local new_col = M.get_new_cursor_col(line, is_same_row)
 
   -- remove cursor placeholder from template
   lines[index] = line:gsub("$CURSOR", "")
 
   -- paste lines and place cursor in correct position
-  vim.api.nvim_put(lines, "l", config.get_opt("insert_template_after_cursor"), true)
+  local type = "l"
+  local after = config.get_opt("insert_template_after_cursor") and true or false
+  if after and config.get_opt("insert_at_current_line") then
+    type = "c"
+    after = config.get_opt("insert_at_current_line_after")
+  end
+
+  vim.api.nvim_put(lines, type, after, true)
   vim.api.nvim_win_set_cursor(0, { new_row, new_col })
 
   -- enter insert mode if configured
