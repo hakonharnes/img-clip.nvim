@@ -167,16 +167,23 @@ M.get_config = function()
   -- find config file in the current directory or any parent directory
   local config_file = vim.fn.findfile(".img-clip.lua", ".;")
   if config_file ~= "" then
-    local success, output = pcall(dofile, config_file)
+    local config_str = vim.secure.read(config_file)
 
-    if success then
-      local opts = vim.tbl_deep_extend("force", {}, defaults, output)
-      M.configs[dir_path] = M.sort_config(opts)
-      M.config_file = config_file
-      return M.configs[dir_path]
-    else
+    if type(config_str) ~= "string" then
       M.configs[dir_path] = {}
-      print("Error loading config file: " .. output)
+      print("Config file is not trusted: " .. config_file)
+    else
+      local success, output = pcall(dofile, config_file)
+
+      if success then
+        local opts = vim.tbl_deep_extend("force", {}, defaults, output)
+        M.configs[dir_path] = M.sort_config(opts)
+        M.config_file = config_file
+        return M.configs[dir_path]
+      else
+        M.configs[dir_path] = {}
+        print("Error loading config file: " .. output)
+      end
     end
   end
 
