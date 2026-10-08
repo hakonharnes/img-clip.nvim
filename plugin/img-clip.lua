@@ -69,6 +69,14 @@ vim.paste = (function(original)
       return original(lines, phase)
     end
 
+    -- Only treat the paste as a potential image drop if it actually looks
+    -- like an image url or path. Some terminals (e.g. Ghostty) route regular
+    -- Cmd+V pastes and IME commits through vim.paste, and those must be
+    -- passed through silently instead of warning "Content is not an image".
+    if not (util.is_image_url(line) or util.is_image_path(line)) then
+      return original(lines, phase)
+    end
+
     util.verbose = false
     config.drag_and_drop = true
 
